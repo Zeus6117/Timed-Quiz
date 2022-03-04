@@ -1,0 +1,114 @@
+:root {
+    --first: rgb(102, 24, 10);
+    --second: rgb(150, 150, 150);
+    --third: rgb(27, 51, 71);
+    --wrong: rgb(255, 22, 12);
+    --correct: rgb(34, 139, 34);
+  }
+  
+  *::before, *::after {
+    box-sizing: border-box;
+    font-family: monospace;
+  }
+  
+  /* Body Styling */
+  
+  body {
+    background: var(--third);
+    color: var(--second);
+    font-size: 2rem;
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  body.correct {
+    color: var(--correct);
+  }
+  
+  .question {
+    font-weight: bolder;
+    font-size: 2.5rem;
+  }
+  /* Header Styling */
+  
+  header {
+    text-align: center;
+    padding: 20px;
+    padding-top: 0px;
+    font-size: 20px;
+  }
+  /* Question Styling */
+  
+  .question {
+    font-weight: 700px;
+  }
+  
+  .answers {
+    display: block;
+  }
+  
+  .answers label {
+    display: block;
+  }
+  
+  /* Button Styling */
+  .start-btn {
+    padding-top: 200px;
+  }
+
+  button {
+    outline: none;
+    border: none;
+    background: var(--first);
+    border-radius: 25px;
+    display: inline-block;
+    font-weight: bolder;
+    font-size: 22px;
+    line-height: 22px;
+    margin: 15px;
+    margin: 16px, 16px, 16px, 20px;
+    padding: 14px 34px;
+    top: -4px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: rgba(102, 24, 10, 0.8);
+    box-shadow: 0 0px var(--third);
+    top: -3px;
+  }
+  
+  button:active {
+    box-shadow: 0 0px var(--third);
+    color: var(--third);
+    top: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .row {
+    margin: 10px;
+  }
+  
+  /* Media Query #1: For Smaller Desktop Screens and Smaller Devices */
+  @media screen and (max-width: 980px) {
+    header {
+      padding-bottom: 0;
+      justify-content: center;
+      position: relative;
+    }
+  
+    header h1 {
+      width: 100%;
+      text-align: center;
+    }
+  }
