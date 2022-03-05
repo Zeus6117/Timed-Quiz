@@ -10,14 +10,14 @@
 
 <script defer src="assets/js/script.js"></script>
 
-<title>Document</title>
+<title>Timed Quiz</title>
 
 </head>
 
-<body class="correct">
+<body>
     <div id="timer"></div>
 
-    <section id="welcome">
+    <section id="container">
         <header>
         <!--Welcome Title-->
         <h1 class="title"></h1>
@@ -31,18 +31,19 @@
             <br>Keep in mind that incorrect answers will
                 penalize your score by 10.</strong>
         </p>
-        <button id="start-btn" class="start -btn btn">Start</button>
-        <button id="next-btn" class="next-btn btn">Next</button>
+        <button id="start-btn" class="start-btn btn">Start</button>
 
     </section>
 
     <!--Questions will be here-->
-    <section id="Quiz-questions">
-        <article id="question-text"></article>
-        <article id="answer-1"></article>
-        <article id="answer-2"></article>
-        <article id="answer-3"></article>
-        <article id="answer-4"></article>
+    <section id="question-container" class="hide">
+        <article id="question"></article>
+        <article id="answer-buttons" class="btn-grid controls">
+        <button id="answer-1" class="btn">A-1</button>
+        <button id="answer-2" class="btn">A-2</button>
+        <button id="answer-3" class="btn">A-3</button>
+        <button id="answer-4" class="btn">A-4</button>
+    </article>
     </section>
 
 </body>
