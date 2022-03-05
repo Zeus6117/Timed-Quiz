@@ -11,94 +11,9 @@ const answerButtonsElement = document.getElementById('answer-buttons')
 
 let shuffledQuestions, currentQuestionIndex
 
-startButton.addEventListener('click', startGame)
+let currentQuestion = 0;
 
-function startTimer() {
-    time = setInterval(updateTimer, 1000);
-  }
-
-  //Function to update timer//
-  function updateTimer() {
-      //add inner HTML to the timer element
-      document.getElementById("timer").innerHTML = "<p> Time Left: " + count + "second(s) left</p>";
-      //minus time from countdown//
-      count--;
-      if (count === 0) {
-          return restartQuiz();
-      }
-  }
-
-
-//start game function//
-function startGame() {
-    startButton.classList.add('hide')
-    shuffledQuestions = questions.sort(() => Math.random() - .5)
-    currentQuestionIndex = 0
-    questionContainerElement.classList.remove('hide')
-    setNextQuestion()
-    startTimer()
-}
-
-function setNextQuestion() {
-    resetState()
-    showQuestion(shuffledQuestions[currentQuestionIndex])
-}
-
-//check answers function//
-function showQuestion(question) {
-    questionElement.innerText = question.question
-    question.answers.forEach(answer => {
-        const button = document.createElement('button')
-        button.innerText = answer.text
-        button.classList.add('btn')
-        if (answer.correct) {
-            button.dataset.correct = answer.correct
-        } else {
-            count -=10
-        }
-        button.addEventListener('click', selectAnswer)
-        answerButtonsElement.appendChild(button)
-    })
-}
-
-function resetState() {
-    nextButton.classList.add('hide')
-    while (answerButtonsElement.firstChild) {
-        answerButtonsElement.removeChild
-        (answerButtonsElement.firstChild)
-    }
-}
-
-function selectAnswer(e) {
-    const selectedButton = e.target
-    const correct = selectedButton.dataset.correct
-    setStatusClass(document.body, correct)
-    Array.from(answerButtonsElement.children).forEach(button => {
-        setStatusClass(button.dataset.correct)
-    })
-    if (shuffledQuestions.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide')
-    } else {
-        startButton.innerText = 'Restart'
-        startButton.classList.remove('hide')
-    }
-}
-
-function setStatusClass(element, correct) {
-    clearStatusClass(element)
-    if (correct){
-        element.classList.add('correct')
-    } else {
-        element.classList.add('wrong')
-    }
-}
-
-function clearStatusClass(element) {
-    element.classList.remove('correct')
-    element.classList.remove('wrong')
-}
-
-const questions = [
+let questions = [
     {
         question: "Commonly used data types DO NOT include?",
         answers: [
@@ -138,6 +53,152 @@ const questions = [
         ]
       },
 ];
+
+startButton.addEventListener('click', startGame)
+
+//universal//
+const timerEl = document.querySelector("#timer");
+
+var interval;
+var time = null;
+var count = 60;
+
+let scores = JSON.parse(localStorage.getItem("user")) || [];
+
+function startTimer() {
+    time = setInterval(updateTimer, 1000);
+  }
+
+  //Function to update timer//
+  function updateTimer() {
+      //add inner HTML to the timer element
+      document.getElementById("timer").innerHTML = "<p> Time Left: " + count + "second(s) left</p>";
+      //minus time from countdown//
+      count--;
+      if (count === 0) {
+          return restartQuiz();
+      }
+  }
+
+
+//start game function//
+function startGame() {
+    startButton.classList.add('hide')
+    shuffledQuestions = questions.sort(() => Math.random() - .5)
+    currentQuestionIndex = 0
+    setNextQuestion()
+    startTimer()
+}
+
+function setNextQuestion() {
+    if (!questions[currentQuestion]) {
+        return endQuiz();
+      }
+      // Insert Question Text - Heading 1
+      document.getElementById("question").innerHTML =
+        "<h1 class='question'> Q:" +
+        " " +
+        questions[currentQuestion].question +
+        "</h1>";
+    
+      // Insert Options - Choice A
+    
+      document.getElementById(
+        "option-1"
+      ).innerHTML = `<button class='opt-1' data-ans="${questions[currentQuestion].answers.a}">${questions[currentQuestion].answers.a}</button>`;
+    
+      // Event Listener - Choice A
+    
+      document.querySelector(".opt-1").addEventListener("click", function () {
+        var user_ans = this.getAttribute("data-ans");
+        checkAnswer(user_ans);
+      });
+    
+      // Insert Options - Choice B
+      document.getElementById(
+        "option-2"
+      ).innerHTML = `<button class='opt-2' data-ans="${questions[currentQuestion].answers.b}">${questions[currentQuestion].answers.b}</button>`;
+    
+      // Event Listener - Choice B
+      document.querySelector(".opt-2").addEventListener("click", function () {
+        var user_ans = this.getAttribute("data-ans");
+        checkAnswer(user_ans);
+      });
+    
+      // Insert Options - Choice C
+      document.getElementById(
+        "option-3"
+      ).innerHTML = `<button class='opt-3' data-ans="${questions[currentQuestion].answers.c}">${questions[currentQuestion].answers.c}</button>`;
+    
+      // Event Listener - Choice C
+      document.querySelector(".opt-3").addEventListener("click", function () {
+        var user_ans = this.getAttribute("data-ans");
+        checkAnswer(user_ans);
+      });
+    
+      // Insert Options - Choice D
+      document.getElementById(
+        "option-4"
+      ).innerHTML = `<button class='opt-4' data-ans="${questions[currentQuestion].answers.c}">${questions[currentQuestion].answers.d}</button>`;
+    
+      // Event Listener - Choice D
+      document.querySelector(".opt-4").addEventListener("click", function () {
+        var user_ans = this.getAttribute("data-ans");
+        checkAnswer(user_ans);
+      });
+    }
+
+
+//check answers function//
+function showQuestion(question) {
+    questionElement.innerText = question.question
+    question.answers.forEach(answer => {
+        const button = document.createElement('button')
+        button.innerText = answer.text
+        button.classList.add('btn')
+        if (answer.correct) {
+            button.dataset.correct = answer.correct
+        }
+        button.addEventListener('click', selectAnswer)
+        answerButtonsElement.appendChild(button)
+    })
+}
+
+function resetState() {
+    while (answerButtonsElement.firstChild) {
+        answerButtonsElement.removeChild
+        (answerButtonsElement.firstChild)
+    }
+}
+
+function selectAnswer(e) {
+    const selectedButton = e.target
+    const correct = selectedButton.dataset.correct
+    setStatusClass(document.body, correct)
+    Array.from(answerButtonsElement.children).forEach(button => {
+        setStatusClass(button.dataset.correct)
+    })
+    if (shuffledQuestions.length > currentQuestionIndex + 1) {
+        nextButton.classList.remove('hide')
+    } else {
+        startButton.innerText = 'Restart'
+        startButton.classList.remove('hide')
+    }
+}
+
+function setStatusClass(element, correct) {
+    clearStatusClass(element)
+    if (correct){
+        element.classList.add('correct')
+    } else {
+        element.classList.add('wrong')
+    }
+}
+
+function clearStatusClass(element) {
+    element.classList.remove('correct')
+    element.classList.remove('wrong')
+}
 
  //function to end quiz//
   
@@ -179,6 +240,6 @@ const questions = [
     startButton.addEventListener("click", function () {
       hide(welcomeEl);
       startGame();
-      getNextQuestion();
+      setNextQuestion();
     });
   }
