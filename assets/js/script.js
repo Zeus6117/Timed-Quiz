@@ -67,7 +67,7 @@ let scores = JSON.parse(localStorage.getItem("user")) || [];
 
 function startTimer() {
     time = setInterval(updateTimer, 1000);
-  }
+}
 
   //Function to update timer//
   function updateTimer() {
@@ -77,6 +77,7 @@ function startTimer() {
       count--;
       if (count === 0) {
           return restartQuiz();
+          clearInterval(startTimer);
       }
   }
 
@@ -84,6 +85,7 @@ function startTimer() {
 //start game function//
 function startGame() {
     startButton.classList.add('hide')
+    questionContainerElement.classList.remove('hide')
     shuffledQuestions = questions.sort(() => Math.random() - .5)
     currentQuestionIndex = 0
     setNextQuestion()
@@ -105,46 +107,46 @@ function setNextQuestion() {
     
       document.getElementById(
         "option-1"
-      ).innerHTML = `<button class='opt-1' data-ans="${questions[currentQuestion].answers.a}">${questions[currentQuestion].answers.a}</button>`;
+      ).innerHTML = `<button class='opt-1' data-ans="${questions[currentQuestion].answers[0].correct}">${questions[currentQuestion].answers[0].text}</button>`;
     
       // Event Listener - Choice A
     
       document.querySelector(".opt-1").addEventListener("click", function () {
         var user_ans = this.getAttribute("data-ans");
-        checkAnswer(user_ans);
+        selectAnswer(user_ans);
       });
     
       // Insert Options - Choice B
       document.getElementById(
         "option-2"
-      ).innerHTML = `<button class='opt-2' data-ans="${questions[currentQuestion].answers.b}">${questions[currentQuestion].answers.b}</button>`;
+      ).innerHTML = `<button class='opt-2' data-ans="${questions[currentQuestion].answers[1].correct}">${questions[currentQuestion].answers[1].text}</button>`;
     
       // Event Listener - Choice B
       document.querySelector(".opt-2").addEventListener("click", function () {
         var user_ans = this.getAttribute("data-ans");
-        checkAnswer(user_ans);
+        selectAnswer(user_ans);
       });
     
       // Insert Options - Choice C
       document.getElementById(
         "option-3"
-      ).innerHTML = `<button class='opt-3' data-ans="${questions[currentQuestion].answers.c}">${questions[currentQuestion].answers.c}</button>`;
+      ).innerHTML = `<button class='opt-3' data-ans="${questions[currentQuestion].answers[2].correct}">${questions[currentQuestion].answers[2].text}</button>`;
     
       // Event Listener - Choice C
       document.querySelector(".opt-3").addEventListener("click", function () {
         var user_ans = this.getAttribute("data-ans");
-        checkAnswer(user_ans);
+        selectAnswer(user_ans);
       });
     
       // Insert Options - Choice D
       document.getElementById(
         "option-4"
-      ).innerHTML = `<button class='opt-4' data-ans="${questions[currentQuestion].answers.c}">${questions[currentQuestion].answers.d}</button>`;
+      ).innerHTML = `<button class='opt-4' data-ans="${questions[currentQuestion].answers[3].correct}">${questions[currentQuestion].answers[3].text}</button>`;
     
       // Event Listener - Choice D
       document.querySelector(".opt-4").addEventListener("click", function () {
         var user_ans = this.getAttribute("data-ans");
-        checkAnswer(user_ans);
+        selectAnswer(user_ans);
       });
     }
 
@@ -171,15 +173,18 @@ function resetState() {
     }
 }
 
-function selectAnswer(e) {
-    const selectedButton = e.target
-    const correct = selectedButton.dataset.correct
+function selectAnswer(user_ans) {
+    console.log(user_ans)
+    
+    const correct = user_ans;
     setStatusClass(document.body, correct)
-    Array.from(answerButtonsElement.children).forEach(button => {
-        setStatusClass(button.dataset.correct)
-    })
+    // Array.from(answerButtonsElement.children).forEach(button => {
+    //     setStatusClass(button, correct)
+    // })
     if (shuffledQuestions.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide')
+      currentQuestion++;
+      setTimeout(setNextQuestion, 1000)
+        
     } else {
         startButton.innerText = 'Restart'
         startButton.classList.remove('hide')
@@ -188,10 +193,12 @@ function selectAnswer(e) {
 
 function setStatusClass(element, correct) {
     clearStatusClass(element)
-    if (correct){
+    if (correct == "true"){
         element.classList.add('correct')
     } else {
         element.classList.add('wrong')
+
+        count-=10;
     }
 }
 
@@ -222,11 +229,7 @@ function clearStatusClass(element) {
     show(welcomeEl);
     clearInterval(time);
     hide(timerEl);
-    hide(quizContentEl);
-  }
-  // Hides Elements
-  function hide(element) {
-    element.style.display = "none";
+    hide(questions-container);
   }
   
   // Displays Element
@@ -240,6 +243,5 @@ function clearStatusClass(element) {
     startButton.addEventListener("click", function () {
       hide(welcomeEl);
       startGame();
-      setNextQuestion();
     });
   }
